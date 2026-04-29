@@ -1,0 +1,1143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>India Civic Intelligence Platform 2026</title>
+  <meta name="description" content="A hyper-interactive educational platform teaching the Indian election process to youth and first-time voters." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+  <style>
+    :root {
+      --bg: #0B0E14;
+      --saffron: #FF9933;
+      --green: #2ECC71;
+      --blue: #2196F3;
+      --purple: #9C27B0;
+      --white: #FFFFFF;
+      --glass: rgba(255,255,255,0.04);
+      --glass-border: rgba(255,255,255,0.10);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--bg);
+      color: var(--white);
+      font-family: 'Inter', sans-serif;
+      overflow-x: hidden;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+      background-size: 40px 40px;
+      min-height: 100vh;
+    }
+
+    /* ── SIDEBAR ── */
+    #sidebar {
+      position: fixed; left: 0; top: 0;
+      height: 100vh; width: 72px;
+      background: rgba(11,14,20,0.85);
+      backdrop-filter: blur(20px);
+      border-right: 1px solid var(--glass-border);
+      display: flex; flex-direction: column;
+      justify-content: center; gap: 6px;
+      z-index: 200;
+      transition: width 0.4s cubic-bezier(0.175,0.885,0.32,1.275);
+      overflow: hidden;
+    }
+    #sidebar:hover { width: 240px; }
+
+    .nav-item {
+      display: flex; align-items: center; gap: 16px;
+      padding: 14px 22px; cursor: pointer;
+      border-left: 3px solid transparent;
+      transition: all 0.3s ease; white-space: nowrap;
+      border-radius: 0 8px 8px 0;
+    }
+    .nav-item:hover { background: rgba(255,153,51,0.08); border-left-color: var(--saffron); }
+    .nav-item.active { background: rgba(255,153,51,0.12); border-left-color: var(--saffron); }
+    .nav-icon { font-size: 1.4rem; flex-shrink: 0; width: 28px; text-align: center; }
+    .nav-label { font-family: 'Outfit', sans-serif; font-weight: 600; font-size: 0.95rem; opacity: 0.9; }
+
+    /* ── MAIN ── */
+    #main { margin-left: 72px; }
+    .section { display: none; min-height: 100vh; animation: fadeIn 0.6s ease; }
+    .section.active { display: flex; flex-direction: column; }
+    @keyframes fadeIn { from { opacity: 0; transform: scale(0.97); } to { opacity: 1; transform: scale(1); } }
+
+    /* ── GLASS CARD ── */
+    .glass {
+      background: var(--glass);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--glass-border);
+      border-radius: 16px;
+    }
+
+    /* ── NEON BUTTON ── */
+    .neon-btn {
+      background: transparent; color: var(--white);
+      border: 2px solid var(--saffron);
+      padding: 12px 28px; border-radius: 30px;
+      cursor: pointer; font-weight: 600; font-family: 'Outfit', sans-serif;
+      font-size: 1rem;
+      transition: all 0.3s ease; position: relative; overflow: hidden;
+      box-shadow: 0 0 12px rgba(255,153,51,0.25);
+    }
+    .neon-btn:hover {
+      background: var(--saffron); color: #000;
+      box-shadow: 0 0 30px rgba(255,153,51,0.6);
+      transform: translateY(-2px);
+    }
+    .neon-btn:active { transform: scale(0.97); }
+
+    /* ── SPEAK BUTTON ── */
+    #speak-btn {
+      position: fixed; top: 20px; right: 100px;
+      z-index: 300; display: flex; align-items: center; gap: 8px;
+      font-size: 0.9rem; padding: 10px 20px;
+    }
+
+    /* ── LANG TOGGLE ── */
+    #lang-toggle {
+      position: fixed; top: 20px; right: 20px;
+      z-index: 300; display: flex; gap: 4px;
+    }
+    .lang-btn {
+      background: rgba(255,255,255,0.07); border: 1px solid var(--glass-border);
+      color: #fff; padding: 8px 12px; border-radius: 8px;
+      cursor: pointer; font-size: 0.8rem; font-weight: 600;
+      transition: all 0.2s;
+    }
+    .lang-btn.active { background: var(--saffron); color: #000; border-color: var(--saffron); }
+
+    /* ── NEXUS ROBOT ── */
+    #nexus-robot {
+      position: fixed; bottom: 30px; right: 30px;
+      width: 70px; height: 70px; z-index: 300;
+      cursor: pointer;
+      animation: float 3s ease-in-out infinite;
+    }
+    @keyframes float {
+      0%,100% { transform: translateY(0); }
+      50% { transform: translateY(-12px); }
+    }
+    #nexus-core {
+      width: 70px; height: 70px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(46,204,113,0.3), rgba(46,204,113,0.05));
+      border: 2px solid var(--green);
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 0 20px rgba(46,204,113,0.4), 0 0 0 0 rgba(46,204,113,0.5);
+      animation: pulse-ring 2s infinite;
+    }
+    @keyframes pulse-ring {
+      0% { box-shadow: 0 0 20px rgba(46,204,113,0.4), 0 0 0 0 rgba(46,204,113,0.5); }
+      70% { box-shadow: 0 0 20px rgba(46,204,113,0.4), 0 0 0 18px rgba(46,204,113,0); }
+      100% { box-shadow: 0 0 20px rgba(46,204,113,0.4), 0 0 0 0 rgba(46,204,113,0); }
+    }
+    .robot-face { font-size: 2rem; }
+
+    /* ── VOICE WAVE ── */
+    #voice-wave {
+      position: fixed; top: 70px; right: 100px;
+      z-index: 299; display: none; align-items: flex-end; gap: 4px; height: 30px;
+    }
+    #voice-wave.active { display: flex; }
+    .wave-bar {
+      width: 4px; background: var(--saffron); border-radius: 2px;
+      animation: wave-anim 0.6s ease-in-out infinite alternate;
+    }
+    .wave-bar:nth-child(1) { animation-delay: 0s; }
+    .wave-bar:nth-child(2) { animation-delay: 0.1s; }
+    .wave-bar:nth-child(3) { animation-delay: 0.2s; }
+    .wave-bar:nth-child(4) { animation-delay: 0.1s; }
+    .wave-bar:nth-child(5) { animation-delay: 0s; }
+    @keyframes wave-anim { from { height: 4px; } to { height: 28px; } }
+
+    /* ══════════════════════════════
+       BRIDGE 0 — HERO HUB
+    ══════════════════════════════ */
+    #hero-section {
+      position: relative; height: 100vh;
+      align-items: center; justify-content: center;
+    }
+    #globe-canvas {
+      position: absolute; top: 0; left: 0;
+      width: 100%; height: 100%; z-index: 1;
+    }
+    #hero-content {
+      position: relative; z-index: 10;
+      text-align: center; pointer-events: none;
+      max-width: 800px; padding: 2rem;
+      animation: heroFloat 1s ease-out;
+    }
+    @keyframes heroFloat { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
+
+    #phase-banner {
+      display: inline-block;
+      background: rgba(255,153,51,0.15);
+      border: 1px solid var(--saffron);
+      color: var(--saffron);
+      padding: 8px 20px; border-radius: 8px;
+      font-weight: 700; font-size: 0.85rem;
+      letter-spacing: 1px; margin-bottom: 1.5rem;
+      text-transform: uppercase;
+      animation: bannerPulse 3s ease-in-out infinite;
+    }
+    @keyframes bannerPulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.04)} }
+
+    #hero-content h1 {
+      font-family: 'Outfit', sans-serif;
+      font-size: clamp(2.5rem, 6vw, 5rem);
+      font-weight: 900; line-height: 1.1;
+      background: linear-gradient(135deg, #fff 30%, var(--saffron) 70%, var(--green) 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text; margin-bottom: 1rem;
+    }
+    #hero-content p {
+      font-size: 1.2rem; color: rgba(255,255,255,0.7);
+      margin-bottom: 2.5rem; line-height: 1.6;
+    }
+    #hero-btn { pointer-events: auto; font-size: 1.1rem; padding: 14px 44px; }
+
+    /* Stats row */
+    .hero-stats {
+      display: flex; gap: 2rem; justify-content: center;
+      margin-top: 3rem; pointer-events: auto; flex-wrap: wrap;
+    }
+    .stat-card {
+      background: rgba(255,255,255,0.05);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 12px; padding: 1rem 1.5rem;
+      text-align: center; min-width: 140px;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    .stat-card:hover { transform: translateY(-5px); box-shadow: 0 10px 30px rgba(255,153,51,0.2); }
+    .stat-num { font-family: 'Outfit',sans-serif; font-size: 2rem; font-weight: 900; color: var(--saffron); }
+    .stat-label { font-size: 0.8rem; color: rgba(255,255,255,0.6); margin-top: 4px; }
+
+    /* ══════════════════════════════
+       BRIDGE 1 — VOTER JOURNEY
+    ══════════════════════════════ */
+    #voter-section { padding: 6rem 3rem 3rem; gap: 3rem; }
+    .section-title {
+      font-family: 'Outfit', sans-serif; font-size: 2.8rem; font-weight: 900;
+      margin-bottom: 0.5rem;
+    }
+    .section-sub { color: rgba(255,255,255,0.55); margin-bottom: 2.5rem; font-size: 1rem; }
+
+    .voter-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
+
+    /* Flip Card */
+    .flip-scene { perspective: 1000px; width: 100%; height: 220px; cursor: pointer; }
+    .flip-card {
+      width: 100%; height: 100%;
+      position: relative; transform-style: preserve-3d;
+      transition: transform 0.8s cubic-bezier(0.175,0.885,0.32,1.275);
+    }
+    .flip-card.flipped { transform: rotateY(180deg); }
+    .flip-front, .flip-back {
+      position: absolute; width: 100%; height: 100%;
+      backface-visibility: hidden; border-radius: 16px;
+      display: flex; align-items: center; justify-content: center;
+      flex-direction: column; gap: 0.5rem; padding: 1.5rem;
+    }
+    .flip-front {
+      background: linear-gradient(135deg, rgba(255,153,51,0.12), rgba(46,204,113,0.05));
+      border: 1px solid rgba(255,153,51,0.3);
+    }
+    .flip-back {
+      background: linear-gradient(135deg, rgba(46,204,113,0.12), rgba(33,150,243,0.05));
+      border: 1px solid rgba(46,204,113,0.3);
+      transform: rotateY(180deg);
+    }
+    .voter-id-graphic {
+      font-size: 5rem; margin-bottom: 0.5rem;
+      filter: drop-shadow(0 0 12px rgba(255,153,51,0.6));
+      animation: idFloat 3s ease-in-out infinite;
+    }
+    @keyframes idFloat { 0%,100%{transform:translateY(0) rotate(-2deg)} 50%{transform:translateY(-8px) rotate(2deg)} }
+
+    /* Steps */
+    .steps-list { display: flex; flex-direction: column; gap: 1rem; }
+    .step-item {
+      display: flex; align-items: center; gap: 1rem; padding: 1rem 1.4rem;
+      background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 12px; transition: all 0.3s;
+      cursor: pointer;
+    }
+    .step-item:hover { background: rgba(255,153,51,0.08); border-color: rgba(255,153,51,0.3); transform: translateX(8px); }
+    .step-num {
+      width: 36px; height: 36px; border-radius: 50%;
+      background: var(--saffron); color: #000;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 900; font-size: 0.9rem; flex-shrink: 0;
+    }
+    .step-text { font-size: 0.95rem; line-height: 1.4; }
+    .step-text strong { display: block; color: var(--saffron); font-size: 1rem; margin-bottom: 2px; }
+
+    /* ══════════════════════════════
+       BRIDGE 2 — POWER MAP
+    ══════════════════════════════ */
+    #map-section { padding: 6rem 3rem 3rem; gap: 2rem; }
+    .map-container {
+      position: relative; width: 100%; height: 60vh;
+      border-radius: 16px; overflow: hidden;
+      border: 1px solid rgba(33,150,243,0.3);
+      background: linear-gradient(135deg, rgba(11,14,20,0.9), rgba(20,30,50,0.9));
+    }
+    #india-svg-map { width: 100%; height: 100%; }
+    .map-legend {
+      display: flex; gap: 1.5rem; flex-wrap: wrap;
+    }
+    .legend-item {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 0.85rem; color: rgba(255,255,255,0.7);
+    }
+    .legend-dot {
+      width: 12px; height: 12px; border-radius: 50%;
+      box-shadow: 0 0 8px currentColor;
+    }
+    .map-marker {
+      position: absolute; transform: translate(-50%,-50%);
+      cursor: pointer; display: flex; flex-direction: column; align-items: center;
+    }
+    .marker-dot {
+      width: 14px; height: 14px; border-radius: 50%;
+      animation: markerPulse 2s ease-in-out infinite;
+    }
+    @keyframes markerPulse {
+      0%,100% { box-shadow: 0 0 0 0 rgba(255,255,255,0.4); }
+      50% { box-shadow: 0 0 0 8px rgba(255,255,255,0); }
+    }
+    .marker-label {
+      font-size: 0.65rem; font-weight: 600; margin-top: 4px;
+      background: rgba(11,14,20,0.8); padding: 2px 6px; border-radius: 4px;
+      white-space: nowrap;
+    }
+
+    /* ══════════════════════════════
+       BRIDGE 3 — SYSTEM LAB
+    ══════════════════════════════ */
+    #system-section { padding: 6rem 3rem 3rem; align-items: center; gap: 2rem; }
+    .power-tree {
+      display: flex; flex-direction: column; align-items: center;
+      gap: 0; width: 100%; max-width: 600px;
+    }
+    .tree-node {
+      position: relative; width: 100%;
+      display: flex; justify-content: center; margin-bottom: 0;
+    }
+    .node-box {
+      padding: 1.2rem 2.5rem; border-radius: 12px;
+      font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 1.1rem;
+      text-align: center; cursor: pointer; transition: all 0.5s ease;
+      border: 2px solid; position: relative; z-index: 2;
+      min-width: 280px;
+    }
+    .node-box:hover { transform: scale(1.05); }
+    .node-connector {
+      width: 4px; height: 50px; background: rgba(255,255,255,0.1);
+      margin: 0 auto; position: relative; z-index: 1; overflow: hidden;
+    }
+    .node-connector-fill {
+      width: 100%; height: 0%; background: var(--saffron);
+      transition: height 1s ease; position: absolute; bottom: 0;
+    }
+    .impact-box {
+      margin-top: 3rem; padding: 2rem; text-align: center;
+      opacity: 0; transition: opacity 1s ease;
+    }
+    .impact-box.visible { opacity: 1; }
+    .vote-impact-num {
+      font-family: 'Outfit', sans-serif; font-size: 4rem; font-weight: 900;
+      color: var(--green); text-shadow: 0 0 30px rgba(46,204,113,0.6);
+    }
+
+    /* ══════════════════════════════
+       BRIDGE 4 — PLAY ZONE
+    ══════════════════════════════ */
+    #play-section { padding: 6rem 3rem 3rem; align-items: center; }
+    .quiz-container { max-width: 700px; width: 100%; }
+    .quiz-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; }
+    .badge-count {
+      display: flex; align-items: center; gap: 8px;
+      background: rgba(156,39,176,0.2); border: 1px solid rgba(156,39,176,0.4);
+      padding: 8px 16px; border-radius: 30px; font-weight: 600; font-size: 0.9rem;
+    }
+
+    .progress-bar-wrapper {
+      background: rgba(255,255,255,0.1); height: 8px; border-radius: 4px;
+      margin-bottom: 2.5rem; overflow: hidden;
+    }
+    .progress-bar {
+      height: 100%; border-radius: 4px;
+      background: linear-gradient(90deg, var(--saffron), var(--green));
+      transition: width 0.8s cubic-bezier(0.175,0.885,0.32,1.275);
+      box-shadow: 0 0 12px rgba(255,153,51,0.5);
+    }
+
+    .quiz-card { padding: 2.5rem; }
+    .quiz-q-num {
+      font-size: 0.85rem; color: var(--saffron); font-weight: 600;
+      text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.8rem;
+    }
+    .quiz-question { font-family: 'Outfit', sans-serif; font-size: 1.5rem; font-weight: 700; margin-bottom: 2rem; line-height: 1.4; }
+    .quiz-options { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .quiz-opt {
+      background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.12);
+      padding: 1rem 1.2rem; border-radius: 12px; cursor: pointer;
+      font-size: 0.95rem; transition: all 0.25s; text-align: left; color: #fff;
+      font-family: 'Inter', sans-serif;
+    }
+    .quiz-opt:hover { background: rgba(255,153,51,0.1); border-color: var(--saffron); transform: scale(1.02); }
+    .quiz-opt.correct { background: rgba(46,204,113,0.2) !important; border-color: var(--green) !important; box-shadow: 0 0 20px rgba(46,204,113,0.3); }
+    .quiz-opt.wrong { background: rgba(255,50,50,0.2) !important; border-color: rgba(255,80,80,0.8) !important; }
+    .quiz-opt.disabled { pointer-events: none; opacity: 0.6; }
+
+    .quiz-feedback {
+      margin-top: 1.5rem; padding: 1rem 1.2rem; border-radius: 12px;
+      font-weight: 600; font-size: 0.95rem; display: none;
+    }
+    .quiz-feedback.correct { background: rgba(46,204,113,0.12); border: 1px solid rgba(46,204,113,0.3); color: var(--green); display: block; }
+    .quiz-feedback.wrong { background: rgba(255,80,80,0.1); border: 1px solid rgba(255,80,80,0.3); color: #ff6b6b; display: block; }
+
+    .quiz-nav { display: flex; justify-content: space-between; align-items: center; margin-top: 2rem; }
+    .score-display { font-weight: 700; color: var(--green); font-size: 1rem; }
+
+    /* Badge popup */
+    .badge-popup {
+      position: fixed; top: 50%; left: 50%;
+      transform: translate(-50%,-50%) scale(0);
+      z-index: 1000; text-align: center;
+      padding: 3rem; border-radius: 24px;
+      background: rgba(11,14,20,0.95);
+      border: 2px solid var(--green);
+      box-shadow: 0 0 60px rgba(46,204,113,0.4);
+      transition: transform 0.5s cubic-bezier(0.175,0.885,0.32,1.275);
+    }
+    .badge-popup.show { transform: translate(-50%,-50%) scale(1); }
+    .badge-icon { font-size: 5rem; margin-bottom: 1rem; animation: spin 0.5s ease; }
+    @keyframes spin { from { transform: rotate(-180deg) scale(0); } to { transform: rotate(0) scale(1); } }
+
+    /* Cursor glow */
+    #cursor-glow {
+      position: fixed; pointer-events: none; z-index: 9999;
+      width: 300px; height: 300px;
+      background: radial-gradient(circle, rgba(255,153,51,0.06) 0%, transparent 70%);
+      transform: translate(-50%, -50%);
+      transition: opacity 0.3s;
+    }
+
+    /* Mobile */
+    @media (max-width: 768px) {
+      #main { margin-left: 72px; }
+      .voter-grid { grid-template-columns: 1fr; }
+      .quiz-options { grid-template-columns: 1fr; }
+      #hero-content h1 { font-size: 2.2rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Cursor Glow -->
+<div id="cursor-glow"></div>
+
+<!-- Language Toggle -->
+<div id="lang-toggle">
+  <button class="lang-btn active" onclick="setLang('en')">EN</button>
+  <button class="lang-btn" onclick="setLang('hi')">HI</button>
+  <button class="lang-btn" onclick="setLang('mr')">MR</button>
+</div>
+
+<!-- Speak to Nexus -->
+<button class="neon-btn" id="speak-btn" onclick="toggleSpeak()">
+  🎙️ <span id="speak-label">Speak to Nexus</span>
+</button>
+
+<!-- Voice Wave -->
+<div id="voice-wave">
+  <div class="wave-bar" style="height:8px"></div>
+  <div class="wave-bar" style="height:16px"></div>
+  <div class="wave-bar" style="height:24px"></div>
+  <div class="wave-bar" style="height:16px"></div>
+  <div class="wave-bar" style="height:8px"></div>
+</div>
+
+<!-- Magnetic Sidebar -->
+<nav id="sidebar">
+  <div class="nav-item active" onclick="showSection('hero')">
+    <span class="nav-icon">🏠</span><span class="nav-label">Home</span>
+  </div>
+  <div class="nav-item" onclick="showSection('voter')">
+    <span class="nav-icon">🗳️</span><span class="nav-label">Voter Journey</span>
+  </div>
+  <div class="nav-item" onclick="showSection('map')">
+    <span class="nav-icon">🗺️</span><span class="nav-label">Power Map</span>
+  </div>
+  <div class="nav-item" onclick="showSection('system')">
+    <span class="nav-icon">⚙️</span><span class="nav-label">System Lab</span>
+  </div>
+  <div class="nav-item" onclick="showSection('play')">
+    <span class="nav-icon">🎮</span><span class="nav-label">Play Zone</span>
+  </div>
+</nav>
+
+<!-- Nexus Robot -->
+<div id="nexus-robot" onclick="showSection('play')" title="Nexus AI – Click to Play!">
+  <div id="nexus-core">
+    <span class="robot-face">🤖</span>
+  </div>
+</div>
+
+<!-- Badge Popup -->
+<div class="badge-popup" id="badge-popup">
+  <div class="badge-icon" id="badge-icon">🏆</div>
+  <h2 id="badge-title" style="font-family:'Outfit',sans-serif;color:#fff;margin-bottom:0.5rem">Civic Scholar!</h2>
+  <p id="badge-desc" style="color:rgba(255,255,255,0.6)">You've earned a new badge!</p>
+  <button class="neon-btn" style="margin-top:1.5rem" onclick="closeBadge()">Awesome! ✨</button>
+</div>
+
+<!-- ════════════════════ MAIN ════════════════════ -->
+<div id="main">
+
+  <!-- BRIDGE 0: HERO HUB -->
+  <section class="section active" id="hero-section">
+    <canvas id="globe-canvas"></canvas>
+    <div id="hero-content">
+      <div id="phase-banner">🗳️ PHASE 2: Maharashtra &amp; Tamil Nadu — Voting April 23, 2026</div>
+      <h1 id="hero-title">India Civic Intelligence Platform</h1>
+      <p id="hero-sub">Explore the digital blueprint of the largest democracy on Earth. Powered by Antigravity motion. Built for the next billion voters.</p>
+      <button class="neon-btn" id="hero-btn" onclick="showSection('voter')">Initialize Journey →</button>
+      <div class="hero-stats">
+        <div class="stat-card">
+          <div class="stat-num">97Cr</div>
+          <div class="stat-label">Registered Voters</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num">543</div>
+          <div class="stat-label">Lok Sabha Seats</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num">10.5L</div>
+          <div class="stat-label">Polling Booths</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num">1</div>
+          <div class="stat-label">Vote = Your Voice</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BRIDGE 1: VOTER JOURNEY -->
+  <section class="section" id="voter-section">
+    <div class="section-title" style="color:var(--saffron)">🗳️ <span id="t-voter-title">Voter Journey</span></div>
+    <p class="section-sub" id="t-voter-sub">Your step-by-step guide to casting India's most powerful ballot.</p>
+
+    <div class="voter-grid">
+      <!-- Flip Card -->
+      <div>
+        <h3 style="margin-bottom:1rem;font-family:'Outfit',sans-serif;opacity:0.7;font-size:0.9rem;text-transform:uppercase;letter-spacing:1px" id="t-flip-hint">👆 Click the card to reveal your details</h3>
+        <div class="flip-scene" onclick="this.querySelector('.flip-card').classList.toggle('flipped')">
+          <div class="flip-card">
+            <div class="flip-front glass">
+              <div class="voter-id-graphic">🪪</div>
+              <div style="font-family:'Outfit',sans-serif;font-size:1.3rem;font-weight:700;color:var(--saffron)" id="t-epic">EPIC CARD</div>
+              <div style="color:rgba(255,255,255,0.6);font-size:0.85rem">Election Photo Identity Card</div>
+              <div style="margin-top:0.5rem;font-size:0.75rem;color:rgba(255,255,255,0.4)" id="t-tap">Tap to Flip →</div>
+            </div>
+            <div class="flip-back glass">
+              <div style="font-size:0.75rem;text-transform:uppercase;letter-spacing:1px;color:var(--green);margin-bottom:0.5rem" id="t-details">Electoral Details</div>
+              <div style="font-size:0.9rem;line-height:1.8;color:rgba(255,255,255,0.8)">
+                🏛️ Assembly: 12-Mumbai North<br/>
+                📋 Part No: 045 &nbsp;|&nbsp; S.No: 809<br/>
+                📍 Booth: Govt School, Andheri<br/>
+                ✅ Status: <span style="color:var(--green);font-weight:700">Verified</span>
+              </div>
+              <div style="margin-top:1rem;background:#fff;padding:8px;border-radius:8px">
+                <img src="https://api.qrserver.com/v1/create-qr-code/?size=80x80&data=EPIC-MH12-BS045-809&color=0B0E14&bgcolor=FFFFFF" width="80" height="80" alt="QR" style="display:block" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Steps -->
+      <div class="glass" style="padding:1.5rem">
+        <h3 style="font-family:'Outfit',sans-serif;font-size:1.2rem;margin-bottom:1.2rem;color:var(--saffron)" id="t-booth-title">⚡ Booth Simulator</h3>
+        <div class="steps-list">
+          <div class="step-item">
+            <div class="step-num">1</div>
+            <div class="step-text"><strong id="t-s1">Check Voter List</strong><span id="t-s1d">Verify your name at voters.eci.gov.in or the booth slip</span></div>
+          </div>
+          <div class="step-item">
+            <div class="step-num">2</div>
+            <div class="step-text"><strong id="t-s2">Carry Valid ID</strong><span id="t-s2d">EPIC, Aadhaar, Passport, or any govt-issued photo ID</span></div>
+          </div>
+          <div class="step-item">
+            <div class="step-num">3</div>
+            <div class="step-text"><strong id="t-s3">Queue at Your Booth</strong><span id="t-s3d">Enter the correct polling booth. Check booth number on slip.</span></div>
+          </div>
+          <div class="step-item">
+            <div class="step-num">4</div>
+            <div class="step-text"><strong id="t-s4">Press the Button 🔘</strong><span id="t-s4d">Press EVM button next to your candidate's symbol. You'll hear a beep!</span></div>
+          </div>
+          <div class="step-item">
+            <div class="step-num">5</div>
+            <div class="step-text"><strong id="t-s5">Get Inked ☝️</strong><span id="t-s5d">Indelible ink on left index finger — your badge of democracy!</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- EVM Simulator -->
+    <div class="glass" style="padding:2rem;max-width:600px;margin:0 auto">
+      <h3 style="font-family:'Outfit',sans-serif;text-align:center;margin-bottom:1.5rem;color:var(--blue)" id="t-evm-title">🖥️ EVM Simulator — Try Voting!</h3>
+      <div id="evm-result" style="display:none;text-align:center;padding:1rem;background:rgba(46,204,113,0.15);border:1px solid var(--green);border-radius:12px;margin-bottom:1rem;font-weight:700;color:var(--green);font-size:1.1rem">
+        ✅ Vote Cast Successfully! VVPAT slip generated. 🫙
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.8rem" id="evm-btns">
+        <button class="quiz-opt" onclick="castVote(this,'🌸 Lotus')" style="display:flex;align-items:center;gap:10px"><span style="font-size:1.5rem">🌸</span> Lotus</button>
+        <button class="quiz-opt" onclick="castVote(this,'✋ Hand')" style="display:flex;align-items:center;gap:10px"><span style="font-size:1.5rem">✋</span> Hand</button>
+        <button class="quiz-opt" onclick="castVote(this,'🚲 Cycle')" style="display:flex;align-items:center;gap:10px"><span style="font-size:1.5rem">🚲</span> Cycle</button>
+        <button class="quiz-opt" onclick="castVote(this,'⌚ Watch')" style="display:flex;align-items:center;gap:10px"><span style="font-size:1.5rem">⌚</span> Watch</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- BRIDGE 2: POWER MAP -->
+  <section class="section" id="map-section">
+    <div class="section-title" style="color:var(--blue)">🗺️ Power Map</div>
+    <p class="section-sub">Click markers to explore polling booths, courts, and Parliament across India.</p>
+    <div class="map-legend">
+      <div class="legend-item"><div class="legend-dot" style="background:#FF9933;color:#FF9933"></div> Polling Booths</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#2ECC71;color:#2ECC71"></div> High Courts</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#2196F3;color:#2196F3"></div> Parliament</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#9C27B0;color:#9C27B0"></div> Election Commission</div>
+    </div>
+    <div class="map-container">
+      <svg id="india-svg-map" viewBox="0 0 600 700" xmlns="http://www.w3.org/2000/svg">
+        <!-- simplified India outline -->
+        <rect width="600" height="700" fill="#0d1220"/>
+        <!-- Grid lines -->
+        <g stroke="rgba(255,255,255,0.04)" stroke-width="1">
+          <line x1="0" y1="100" x2="600" y2="100"/>
+          <line x1="0" y1="200" x2="600" y2="200"/>
+          <line x1="0" y1="300" x2="600" y2="300"/>
+          <line x1="0" y1="400" x2="600" y2="400"/>
+          <line x1="0" y1="500" x2="600" y2="500"/>
+          <line x1="0" y1="600" x2="600" y2="600"/>
+          <line x1="100" y1="0" x2="100" y2="700"/>
+          <line x1="200" y1="0" x2="200" y2="700"/>
+          <line x1="300" y1="0" x2="300" y2="700"/>
+          <line x1="400" y1="0" x2="400" y2="700"/>
+          <line x1="500" y1="0" x2="500" y2="700"/>
+        </g>
+        <!-- India outline (simplified path) -->
+        <path d="M160,80 L220,60 L280,55 L340,70 L400,90 L440,130 L460,170 L470,210 L480,240 L490,270 L500,300 L490,330 L510,360 L500,400 L480,440 L460,480 L440,510 L420,540 L400,570 L380,600 L360,630 L340,650 L320,660 L310,640 L290,620 L280,590 L270,560 L260,530 L240,500 L220,470 L200,440 L190,400 L180,360 L170,320 L160,280 L150,240 L140,200 L130,160 L140,120 Z"
+          fill="rgba(255,153,51,0.06)" stroke="rgba(255,153,51,0.3)" stroke-width="2"/>
+
+        <!-- State regions -->
+        <text x="300" y="200" fill="rgba(255,255,255,0.15)" font-size="12" text-anchor="middle">Rajasthan</text>
+        <text x="290" y="280" fill="rgba(255,255,255,0.15)" font-size="12" text-anchor="middle">MP</text>
+        <text x="420" y="280" fill="rgba(255,255,255,0.15)" font-size="11" text-anchor="middle">Jharkhand</text>
+        <text x="350" y="360" fill="rgba(255,255,255,0.15)" font-size="12" text-anchor="middle">Maharashtra</text>
+        <text x="290" y="420" fill="rgba(255,255,255,0.15)" font-size="11" text-anchor="middle">Karnataka</text>
+        <text x="380" y="460" fill="rgba(255,255,255,0.15)" font-size="11" text-anchor="middle">Andhra Pradesh</text>
+        <text x="340" y="540" fill="rgba(255,255,255,0.15)" font-size="11" text-anchor="middle">Tamil Nadu</text>
+
+        <!-- MARKERS -->
+        <!-- Parliament - New Delhi -->
+        <g onclick="showMapInfo('Parliament of India','New Delhi, NCT','Every law governing India is passed here. Home of 543 elected MPs.')">
+          <circle cx="290" cy="155" r="10" fill="#2196F3" opacity="0.9"/>
+          <circle cx="290" cy="155" r="6" fill="#fff" opacity="0.9"/>
+          <circle cx="290" cy="155" r="18" fill="none" stroke="#2196F3" stroke-width="1.5" opacity="0.5">
+            <animate attributeName="r" from="10" to="22" dur="2s" repeatCount="indefinite"/>
+            <animate attributeName="opacity" from="0.5" to="0" dur="2s" repeatCount="indefinite"/>
+          </circle>
+          <text x="306" y="150" fill="#2196F3" font-size="10" font-weight="bold">🏛️ Parliament</text>
+        </g>
+
+        <!-- Election Commission -->
+        <g onclick="showMapInfo('Election Commission of India','Nirvachan Sadan, New Delhi','The guardian of Indian democracy. Conducts all elections.')">
+          <circle cx="300" cy="175" r="8" fill="#9C27B0" opacity="0.9"/>
+          <circle cx="300" cy="175" r="16" fill="none" stroke="#9C27B0" stroke-width="1" opacity="0.4">
+            <animate attributeName="r" from="8" to="20" dur="2.5s" repeatCount="indefinite"/>
+            <animate attributeName="opacity" from="0.4" to="0" dur="2.5s" repeatCount="indefinite"/>
+          </circle>
+          <text x="316" y="178" fill="#9C27B0" font-size="9">🗳️ ECI</text>
+        </g>
+
+        <!-- Mumbai Booths -->
+        <g onclick="showMapInfo('Mumbai Polling Booths','Mumbai, Maharashtra','Over 10,000 booths operational. Phase 2 voting in progress!')">
+          <circle cx="265" cy="360" r="9" fill="#FF9933" opacity="0.9"/>
+          <circle cx="265" cy="360" r="17" fill="none" stroke="#FF9933" stroke-width="1" opacity="0.4">
+            <animate attributeName="r" from="9" to="21" dur="1.8s" repeatCount="indefinite"/>
+            <animate attributeName="opacity" from="0.4" to="0" dur="1.8s" repeatCount="indefinite"/>
+          </circle>
+          <text x="278" y="355" fill="#FF9933" font-size="9">📍 Mumbai Booths</text>
+        </g>
+
+        <!-- Chennai Booths -->
+        <g onclick="showMapInfo('Chennai Polling Booths','Chennai, Tamil Nadu','Phase 2 active zone. 5,200+ booths deployed.')">
+          <circle cx="350" cy="520" r="9" fill="#FF9933" opacity="0.9"/>
+          <circle cx="350" cy="520" r="17" fill="none" stroke="#FF9933" stroke-width="1" opacity="0.4">
+            <animate attributeName="r" from="9" to="21" dur="1.6s" repeatCount="indefinite"/>
+            <animate attributeName="opacity" from="0.4" to="0" dur="1.6s" repeatCount="indefinite"/>
+          </circle>
+          <text x="363" y="515" fill="#FF9933" font-size="9">📍 Chennai Booths</text>
+        </g>
+
+        <!-- High Court Bombay -->
+        <g onclick="showMapInfo('Bombay High Court','Fort, Mumbai, Maharashtra','Established 1862. Judicial authority over Maharashtra & Goa.')">
+          <circle cx="258" cy="375" r="7" fill="#2ECC71" opacity="0.9"/>
+          <circle cx="258" cy="375" r="14" fill="none" stroke="#2ECC71" stroke-width="1" opacity="0.4">
+            <animate attributeName="r" from="7" to="18" dur="2.2s" repeatCount="indefinite"/>
+            <animate attributeName="opacity" from="0.4" to="0" dur="2.2s" repeatCount="indefinite"/>
+          </circle>
+          <text x="270" y="378" fill="#2ECC71" font-size="9">⚖️ High Court</text>
+        </g>
+
+        <!-- Madras High Court -->
+        <g onclick="showMapInfo('Madras High Court','Chennai, Tamil Nadu','One of the oldest High Courts in India, est. 1862.')">
+          <circle cx="343" cy="535" r="7" fill="#2ECC71" opacity="0.9"/>
+          <circle cx="343" cy="535" r="14" fill="none" stroke="#2ECC71" stroke-width="1" opacity="0.4">
+            <animate attributeName="r" from="7" to="18" dur="2s" repeatCount="indefinite"/>
+            <animate attributeName="opacity" from="0.4" to="0" dur="2s" repeatCount="indefinite"/>
+          </circle>
+          <text x="354" y="538" fill="#2ECC71" font-size="9">⚖️ High Court</text>
+        </g>
+
+        <text x="300" y="690" fill="rgba(255,153,51,0.5)" font-size="11" text-anchor="middle">🇮🇳 India — Click any marker for details</text>
+      </svg>
+    </div>
+
+    <!-- Info Panel -->
+    <div class="glass" id="map-info-panel" style="padding:1.5rem;display:none;max-width:500px;border-color:rgba(33,150,243,0.3)">
+      <h3 id="map-info-name" style="font-family:'Outfit',sans-serif;color:var(--blue);margin-bottom:0.3rem"></h3>
+      <p id="map-info-loc" style="font-size:0.85rem;color:rgba(255,255,255,0.5);margin-bottom:0.8rem"></p>
+      <p id="map-info-desc" style="color:rgba(255,255,255,0.8);line-height:1.6"></p>
+    </div>
+  </section>
+
+  <!-- BRIDGE 3: SYSTEM LAB -->
+  <section class="section" id="system-section">
+    <div class="section-title" style="color:var(--purple)">⚙️ System Lab</div>
+    <p class="section-sub">Click <strong style="color:var(--saffron)">Citizen</strong> to trace the flow of power from ballot to Prime Minister.</p>
+
+    <div class="power-tree" id="power-tree">
+      <!-- Node 1 - Citizen -->
+      <div class="tree-node">
+        <div class="node-box" id="node-1"
+          style="border-color:#FF9933;background:rgba(255,153,51,0.08);cursor:pointer"
+          onclick="activatePowerFlow()">
+          👤 Citizen (Voter) — Click Me!
+        </div>
+      </div>
+      <div class="node-connector"><div class="node-connector-fill" id="conn-1"></div></div>
+
+      <!-- Node 2 - MP -->
+      <div class="tree-node">
+        <div class="node-box" id="node-2" style="border-color:#2196F3;background:rgba(33,150,243,0.05)">
+          🏅 Member of Parliament (MP)
+        </div>
+      </div>
+      <div class="node-connector"><div class="node-connector-fill" id="conn-2"></div></div>
+
+      <!-- Node 3 - Lok Sabha -->
+      <div class="tree-node">
+        <div class="node-box" id="node-3" style="border-color:#9C27B0;background:rgba(156,39,176,0.05)">
+          🏛️ Parliament — Lok Sabha (543 MPs)
+        </div>
+      </div>
+      <div class="node-connector"><div class="node-connector-fill" id="conn-3"></div></div>
+
+      <!-- Node 4 - PM -->
+      <div class="tree-node">
+        <div class="node-box" id="node-4" style="border-color:#2ECC71;background:rgba(46,204,113,0.05)">
+          🇮🇳 Prime Minister of India
+        </div>
+      </div>
+    </div>
+
+    <div class="impact-box glass" id="impact-box" style="padding:2.5rem;max-width:580px;margin-top:3rem">
+      <div class="vote-impact-num" id="vote-counter">0</div>
+      <p style="font-family:'Outfit',sans-serif;font-size:1.5rem;font-weight:700;margin:0.5rem 0">votes elect 1 MP in your constituency</p>
+      <p style="color:rgba(255,255,255,0.6);font-size:0.9rem;margin-top:0.5rem">With ~140 crore citizens, your 1 vote is part of the most powerful democratic exercise on Earth.</p>
+      <div style="display:flex;gap:1.5rem;justify-content:center;margin-top:1.5rem;flex-wrap:wrap">
+        <div style="text-align:center">
+          <div style="font-family:'Outfit',sans-serif;font-size:2rem;font-weight:900;color:var(--saffron)">543</div>
+          <div style="font-size:0.75rem;color:rgba(255,255,255,0.5)">Lok Sabha Seats</div>
+        </div>
+        <div style="text-align:center">
+          <div style="font-family:'Outfit',sans-serif;font-size:2rem;font-weight:900;color:var(--blue)">28</div>
+          <div style="font-size:0.75rem;color:rgba(255,255,255,0.5)">States Represented</div>
+        </div>
+        <div style="text-align:center">
+          <div style="font-family:'Outfit',sans-serif;font-size:2rem;font-weight:900;color:var(--green)">5yrs</div>
+          <div style="font-size:0.75rem;color:rgba(255,255,255,0.5)">Term of Parliament</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BRIDGE 4: PLAY ZONE -->
+  <section class="section" id="play-section">
+    <div class="quiz-container">
+      <div class="quiz-header">
+        <div>
+          <div class="section-title" style="color:var(--purple)">🎮 Play Zone</div>
+          <p class="section-sub" style="margin-bottom:0">Test your civic knowledge. Earn badges!</p>
+        </div>
+        <div class="badge-count">🏆 Badges: <span id="badge-count">0</span></div>
+      </div>
+
+      <div class="progress-bar-wrapper">
+        <div class="progress-bar" id="quiz-progress" style="width:0%"></div>
+      </div>
+
+      <div class="glass quiz-card">
+        <div class="quiz-q-num" id="quiz-num">Question 1 of 8</div>
+        <div class="quiz-question" id="quiz-q">What is the minimum age to vote in India?</div>
+        <div class="quiz-options" id="quiz-opts"></div>
+        <div class="quiz-feedback" id="quiz-feedback"></div>
+        <div class="quiz-nav">
+          <div class="score-display">Score: <span id="quiz-score">0</span> / <span id="quiz-total">0</span></div>
+          <button class="neon-btn" id="quiz-next" onclick="nextQuestion()" style="display:none;font-size:0.9rem;padding:10px 22px">Next →</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div><!-- /main -->
+
+<script>
+// ── CURSOR GLOW ──
+document.addEventListener('mousemove', e => {
+  const g = document.getElementById('cursor-glow');
+  g.style.left = e.clientX + 'px';
+  g.style.top = e.clientY + 'px';
+});
+
+// ── THREE.JS GLOBE ──
+(function initGlobe() {
+  const canvas = document.getElementById('globe-canvas');
+  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+  renderer.setPixelRatio(window.devicePixelRatio);
+  renderer.setSize(canvas.offsetWidth || window.innerWidth, canvas.offsetHeight || window.innerHeight);
+
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(45, canvas.offsetWidth / canvas.offsetHeight, 0.1, 1000);
+  camera.position.z = 5;
+
+  // Globe
+  const geo = new THREE.SphereGeometry(2, 48, 48);
+  const mat = new THREE.MeshPhongMaterial({
+    color: 0x0B0E14, emissive: 0x111827,
+    wireframe: true, transparent: true, opacity: 0.5
+  });
+  const globe = new THREE.Mesh(geo, mat);
+  scene.add(globe);
+
+  // Solid inner globe
+  const innerMat = new THREE.MeshPhongMaterial({ color: 0x0d1a2e, transparent: true, opacity: 0.6 });
+  scene.add(new THREE.Mesh(new THREE.SphereGeometry(1.98, 48, 48), innerMat));
+
+  // Glow ring
+  const ringGeo = new THREE.TorusGeometry(2.3, 0.04, 16, 100);
+  const ringMat = new THREE.MeshBasicMaterial({ color: 0xFF9933, transparent: true, opacity: 0.6 });
+  const ring = new THREE.Mesh(ringGeo, ringMat);
+  ring.rotation.x = Math.PI / 2.5;
+  scene.add(ring);
+
+  // Second ring
+  const ring2 = new THREE.Mesh(
+    new THREE.TorusGeometry(2.5, 0.02, 16, 100),
+    new THREE.MeshBasicMaterial({ color: 0x2ECC71, transparent: true, opacity: 0.3 })
+  );
+  ring2.rotation.x = Math.PI / 6;
+  ring2.rotation.z = Math.PI / 4;
+  scene.add(ring2);
+
+  // Stars
+  const starGeo = new THREE.BufferGeometry();
+  const starVerts = [];
+  for (let i = 0; i < 3000; i++) {
+    starVerts.push((Math.random() - 0.5) * 200, (Math.random() - 0.5) * 200, (Math.random() - 0.5) * 200);
+  }
+  starGeo.setAttribute('position', new THREE.Float32BufferAttribute(starVerts, 3));
+  scene.add(new THREE.Points(starGeo, new THREE.PointsMaterial({ color: 0xffffff, size: 0.15 })));
+
+  // Lights
+  scene.add(new THREE.AmbientLight(0xffffff, 0.4));
+  const dLight = new THREE.DirectionalLight(0xFF9933, 1.2);
+  dLight.position.set(5, 3, 5);
+  scene.add(dLight);
+  const dLight2 = new THREE.DirectionalLight(0x2ECC71, 1);
+  dLight2.position.set(-5, -3, -5);
+  scene.add(dLight2);
+
+  // Mouse interaction
+  let mx = 0, my = 0;
+  document.addEventListener('mousemove', e => {
+    mx = (e.clientX / window.innerWidth - 0.5) * 2;
+    my = (e.clientY / window.innerHeight - 0.5) * 2;
+  });
+
+  function animate() {
+    requestAnimationFrame(animate);
+    globe.rotation.y += 0.003;
+    globe.rotation.x += 0.0005;
+    ring.rotation.z += 0.005;
+    ring2.rotation.y += 0.003;
+    camera.position.x += (mx * 0.5 - camera.position.x) * 0.05;
+    camera.position.y += (-my * 0.5 - camera.position.y) * 0.05;
+    camera.lookAt(scene.position);
+    renderer.render(scene, camera);
+  }
+  animate();
+
+  window.addEventListener('resize', () => {
+    const w = window.innerWidth - 72, h = window.innerHeight;
+    renderer.setSize(w, h);
+    camera.aspect = w / h;
+    camera.updateProjectionMatrix();
+  });
+})();
+
+// ── SECTION NAVIGATION ──
+function showSection(id) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById(id + '-section').classList.add('active');
+  const navMap = { hero: 0, voter: 1, map: 2, system: 3, play: 4 };
+  document.querySelectorAll('.nav-item')[navMap[id]].classList.add('active');
+  if (id === 'play') initQuiz();
+}
+
+// ── SPEAK TO NEXUS ──
+let isSpeaking = false;
+function toggleSpeak() {
+  isSpeaking = !isSpeaking;
+  const btn = document.getElementById('speak-btn');
+  const wave = document.getElementById('voice-wave');
+  const label = document.getElementById('speak-label');
+  if (isSpeaking) {
+    wave.classList.add('active');
+    label.textContent = 'Listening... 🟢';
+    btn.style.background = 'var(--saffron)';
+    btn.style.color = '#000';
+    if ('speechSynthesis' in window) {
+      const msg = new SpeechSynthesisUtterance('Welcome to India Civic Intelligence Platform! I am Nexus, your AI guide. Ask me anything about the Indian election process!');
+      msg.rate = 0.9;
+      speechSynthesis.speak(msg);
+    }
+    setTimeout(() => { isSpeaking = false; wave.classList.remove('active'); label.textContent = 'Speak to Nexus'; btn.style.background = 'transparent'; btn.style.color = '#fff'; }, 4000);
+  } else {
+    wave.classList.remove('active');
+    label.textContent = 'Speak to Nexus';
+    btn.style.background = 'transparent';
+    btn.style.color = '#fff';
+    speechSynthesis.cancel();
+  }
+}
+
+// ── LANGUAGE ──
+const translations = {
+  en: { heroTitle: 'India Civic Intelligence Platform', heroSub: 'Explore the digital blueprint of the largest democracy on Earth. Powered by Antigravity motion. Built for the next billion voters.' },
+  hi: { heroTitle: 'भारत नागरिक बुद्धिमत्ता मंच', heroSub: 'पृथ्वी के सबसे बड़े लोकतंत्र का डिजिटल ब्लूप्रिंट। अगले एक अरब मतदाताओं के लिए बनाया गया।' },
+  mr: { heroTitle: 'भारत नागरी बुद्धिमत्ता व्यासपीठ', heroSub: 'पृथ्वीवरील सर्वात मोठ्या लोकशाहीचे डिजिटल ब्लूप्रिंट. पुढील अब्ज मतदारांसाठी.' }
+};
+
+function setLang(lang) {
+  document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  const t = translations[lang];
+  document.getElementById('hero-title').textContent = t.heroTitle;
+  document.getElementById('hero-sub').textContent = t.heroSub;
+}
+
+// ── EVM SIMULATOR ──
+function castVote(btn, party) {
+  document.querySelectorAll('#evm-btns button').forEach(b => { b.disabled = true; b.classList.add('disabled'); });
+  btn.classList.add('correct');
+  document.getElementById('evm-result').style.display = 'block';
+  document.getElementById('evm-result').innerHTML = '✅ Vote Cast for <strong>' + party + '</strong>! VVPAT slip generated. Your vote is sealed & secure. 🫙';
+  setTimeout(() => {
+    document.querySelectorAll('#evm-btns button').forEach(b => { b.disabled = false; b.classList.remove('disabled','correct'); });
+    document.getElementById('evm-result').style.display = 'none';
+  }, 3000);
+}
+
+// ── MAP INFO ──
+function showMapInfo(name, loc, desc) {
+  const p = document.getElementById('map-info-panel');
+  document.getElementById('map-info-name').textContent = name;
+  document.getElementById('map-info-loc').textContent = '📍 ' + loc;
+  document.getElementById('map-info-desc').textContent = desc;
+  p.style.display = 'block';
+  p.style.animation = 'fadeIn 0.4s ease';
+}
+
+// ── POWER FLOW ──
+let flowActive = false;
+function activatePowerFlow() {
+  if (flowActive) return;
+  flowActive = true;
+  const steps = [
+    { nodeId: 'node-1', connId: 'conn-1', color: '#FF9933', delay: 0 },
+    { nodeId: 'node-2', connId: 'conn-2', color: '#2196F3', delay: 1200 },
+    { nodeId: 'node-3', connId: 'conn-3', color: '#9C27B0', delay: 2400 },
+    { nodeId: 'node-4', connId: null, color: '#2ECC71', delay: 3600 },
+  ];
+  steps.forEach(s => {
+    setTimeout(() => {
+      const node = document.getElementById(s.nodeId);
+      node.style.background = s.color + '33';
+      node.style.borderColor = s.color;
+      node.style.boxShadow = '0 0 24px ' + s.color + '88, 0 0 60px ' + s.color + '33';
+      node.style.transform = 'scale(1.04)';
+      if (s.connId) document.getElementById(s.connId).style.height = '100%';
+    }, s.delay);
+  });
+
+  // Count up animation
+  setTimeout(() => {
+    document.getElementById('impact-box').classList.add('visible');
+    let count = 0;
+    const target = 150000;
+    const interval = setInterval(() => {
+      count += 4200;
+      if (count >= target) { count = target; clearInterval(interval); }
+      document.getElementById('vote-counter').textContent = count.toLocaleString('en-IN');
+    }, 40);
+  }, 4200);
+
+  setTimeout(() => {
+    const node = document.getElementById('node-4');
+    node.textContent = '🎉 Prime Minister Elected by YOUR Vote!';
+  }, 4000);
+
+  setTimeout(() => { flowActive = false; }, 5000);
+}
+
+// ── QUIZ ──
+const questions = [
+  { q: 'What is the minimum age to vote in India?', opts: ['16 years','18 years','21 years','25 years'], ans: 1, fact: '✅ Correct! The 61st Constitutional Amendment (1988) lowered the voting age from 21 to 18.' },
+  { q: 'What does EVM stand for?', opts: ['Electronic Voting Machine','Electric Vote Maker','Electronic Vote Monitor','Electoral Voting Module'], ans: 0, fact: '✅ EVM — Electronic Voting Machine. India pioneered its use in elections from 1998!' },
+  { q: 'Which body conducts elections in India?', opts: ['Supreme Court','Rajya Sabha','Election Commission of India','President of India'], ans: 2, fact: '✅ The Election Commission of India (ECI) is an autonomous constitutional body. Established Jan 25, 1950!' },
+  { q: 'What is the term of the Lok Sabha?', opts: ['3 years','4 years','5 years','6 years'], ans: 2, fact: '✅ Lok Sabha has a 5-year term, unless dissolved earlier by the President on advice of Prime Minister.' },
+  { q: 'What ink is put on a voter\'s finger after voting?', opts: ['Blue permanent ink','Black marker ink','Indelible purple ink','Red permanent ink'], ans: 2, fact: '✅ Indelible purple ink (Silver Nitrate based) made in Mysore Paints. It lasts 2+ weeks and prevents double voting!' },
+  { q: 'The VVPAT in elections stands for?', opts: ['Voter Verified Paper Audit Trail','Vote Verification Purpose Audit Tool','Verified Voter Paper Authentication Test','Voter Validation & Paper Assessment Technology'], ans: 0, fact: '✅ VVPAT — Voter Verified Paper Audit Trail. It lets you verify your vote through a glass window for 7 seconds.' },
+  { q: 'How many seats are there in the Lok Sabha?', opts: ['250','450','543','600'], ans: 2, fact: '✅ Lok Sabha has 543 elected members, plus 2 members (Anglo-Indian) nominated by the President (discontinued in 2020).' },
+  { q: 'Which article of the Constitution gives the right to vote?', opts: ['Article 14','Article 21','Article 326','Article 370'], ans: 2, fact: '✅ Article 326 provides for elections to Lok Sabha and State Assemblies based on adult suffrage — every citizen 18+ votes!' },
+];
+
+let currentQ = 0;
+let score = 0;
+let answered = false;
+let badges = 0;
+let quizInitialized = false;
+
+function initQuiz() {
+  if (quizInitialized) return;
+  quizInitialized = true;
+  renderQuestion();
+}
+
+function renderQuestion() {
+  const q = questions[currentQ];
+  document.getElementById('quiz-num').textContent = 'Question ' + (currentQ + 1) + ' of ' + questions.length;
+  document.getElementById('quiz-q').textContent = q.q;
+  document.getElementById('quiz-progress').style.width = (currentQ / questions.length * 100) + '%';
+  document.getElementById('quiz-total').textContent = currentQ;
+  document.getElementById('quiz-score').textContent = score;
+  document.getElementById('quiz-feedback').className = 'quiz-feedback';
+  document.getElementById('quiz-feedback').textContent = '';
+  document.getElementById('quiz-next').style.display = 'none';
+  answered = false;
+
+  const optsDiv = document.getElementById('quiz-opts');
+  optsDiv.innerHTML = '';
+  q.opts.forEach((opt, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'quiz-opt';
+    btn.textContent = opt;
+    btn.onclick = () => answerQ(i);
+    optsDiv.appendChild(btn);
+  });
+}
+
+function answerQ(idx) {
+  if (answered) return;
+  answered = true;
+  const q = questions[currentQ];
+  const opts = document.querySelectorAll('.quiz-opt');
+  opts.forEach((o, i) => {
+    o.classList.add('disabled');
+    if (i === q.ans) o.classList.add('correct');
+    else if (i === idx && idx !== q.ans) o.classList.add('wrong');
+  });
+
+  const fb = document.getElementById('quiz-feedback');
+  if (idx === q.ans) {
+    score++;
+    fb.textContent = q.fact;
+    fb.className = 'quiz-feedback correct';
+    document.getElementById('quiz-score').textContent = score;
+  } else {
+    fb.textContent = '❌ Not quite! The correct answer is: "' + q.opts[q.ans] + '". ' + q.fact.replace('✅ Correct! ','');
+    fb.className = 'quiz-feedback wrong';
+  }
+
+  document.getElementById('quiz-total').textContent = currentQ + 1;
+  document.getElementById('quiz-next').style.display = 'block';
+
+  // Award badge every 3 correct
+  if (score > 0 && score % 3 === 0 && idx === q.ans) {
+    setTimeout(() => awardBadge(), 500);
+  }
+}
+
+function nextQuestion() {
+  currentQ++;
+  if (currentQ >= questions.length) {
+    endQuiz();
+    return;
+  }
+  renderQuestion();
+}
+
+function endQuiz() {
+  document.getElementById('quiz-progress').style.width = '100%';
+  const pct = Math.round(score / questions.length * 100);
+  let badge = '🌟', title = 'Civic Beginner', desc = 'Keep learning! Every vote counts.';
+  if (pct >= 87) { badge = '🏆'; title = 'Master Voter!'; desc = 'Perfect knowledge! You\'re ready to change India!'; }
+  else if (pct >= 62) { badge = '🥇'; title = 'Civic Scholar!'; desc = 'Outstanding! You know your democracy well.'; }
+  else if (pct >= 37) { badge = '🥈'; title = 'Informed Citizen!'; desc = 'Good job! A little more study and you\'ll be a master.'; }
+  awardBadge(badge, title, 'You scored ' + score + '/' + questions.length + ' (' + pct + '%). ' + desc);
+
+  document.getElementById('quiz-opts').innerHTML = '<button class="neon-btn" onclick="restartQuiz()" style="width:100%;margin-top:1rem">🔁 Play Again</button>';
+}
+
+function awardBadge(icon, title, desc) {
+  badges++;
+  document.getElementById('badge-count').textContent = badges;
+  document.getElementById('badge-icon').textContent = icon || '🏅';
+  document.getElementById('badge-title').textContent = title || 'Badge Earned!';
+  document.getElementById('badge-desc').textContent = desc || 'You\'re earning civic knowledge badges!';
+  document.getElementById('badge-popup').classList.add('show');
+}
+
+function closeBadge() { document.getElementById('badge-popup').classList.remove('show'); }
+
+function restartQuiz() {
+  currentQ = 0; score = 0; answered = false; quizInitialized = false;
+  initQuiz();
+}
+</script>
+</body>
+</html>
