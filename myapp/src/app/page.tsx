@@ -133,7 +133,12 @@ export default function GlobalCivicPlatform() {
       </div>
 
       {/* Top Action Bar */}
-      <div style={{ position: 'fixed', top: '20px', right: '20px', display: 'flex', gap: '15px', zIndex: 100 }}>
+      <header style={{ position: 'fixed', top: '20px', right: '20px', display: 'flex', alignItems: 'center', gap: '15px', zIndex: 100 }}>
+        {user && user.displayName && (
+          <span style={{ color: '#fff', fontSize: '1.1rem', fontWeight: 600, marginRight: '10px' }}>
+            Welcome, {user.displayName.split(' ')[0]}
+          </span>
+        )}
         <button 
           className="neon-btn" 
           onClick={handleSpeakClick}
@@ -142,7 +147,7 @@ export default function GlobalCivicPlatform() {
           <Mic size={18} />
           {isSpeaking ? 'Listening...' : 'AI Mentor'}
         </button>
-      </div>
+      </header>
 
       {/* Voice Animation */}
       <AnimatePresence>

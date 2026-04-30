@@ -19,9 +19,13 @@ interface ProfileProps {
   onLogin: () => void;
 }
 
+/**
+ * Profile component manages the user's digital identity and election readiness status.
+ * Integrates with Google Auth.
+ */
 export default function Profile({ user, data, setData, onLogin }: ProfileProps) {
   return (
-    <div style={{ paddingTop: '80px', minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', paddingBottom: '100px' }}>
+    <section style={{ paddingTop: '80px', minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', paddingBottom: '100px' }}>
       <h2 style={{ fontSize: '3rem', marginBottom: '3rem', color: '#fff', textShadow: '0 0 15px rgba(255,255,255,0.2)' }}>
         User Profile
       </h2>
@@ -49,7 +53,7 @@ export default function Profile({ user, data, setData, onLogin }: ProfileProps) 
           {/* Avatar Card */}
           <div className="glass-panel" style={{ padding: '2.5rem', display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center' }}>
             <div style={{ width: '120px', height: '120px', borderRadius: '50%', overflow: 'hidden', border: '4px solid #1A237E', marginBottom: '1.5rem', boxShadow: '0 0 20px rgba(26, 35, 126, 0.4)' }}>
-              <img src={user.photoURL || ''} alt="Profile" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+              <img src={user.photoURL || ''} alt="User profile picture" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
             </div>
             <h3 style={{ fontSize: '1.5rem', marginBottom: '0.5rem' }}>{user.displayName}</h3>
             <p style={{ color: '#aaa', fontSize: '0.9rem', marginBottom: '2rem' }}>{user.email}</p>
@@ -106,6 +110,6 @@ export default function Profile({ user, data, setData, onLogin }: ProfileProps) 
           </div>
         </motion.div>
       )}
-    </div>
+    </section>
   );
 }

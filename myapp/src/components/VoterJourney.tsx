@@ -67,6 +67,10 @@ const StageCard = ({ title, subtitle, icon: Icon, content, links, isExpanded, on
   </motion.div>
 );
 
+/**
+ * VoterJourney maps out the enfranchisement process into a strict 1-2-3 path
+ * ensuring election process education is clear and structured.
+ */
 export default function VoterJourney({ userAge }: { userAge: number }) {
   const [expandedStage, setExpandedStage] = useState<number | null>(userAge < 18 ? 1 : 2);
 
@@ -110,7 +114,7 @@ export default function VoterJourney({ userAge }: { userAge: number }) {
   ];
 
   return (
-    <div style={{ paddingTop: '80px', minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', paddingBottom: '120px' }}>
+    <section style={{ paddingTop: '80px', minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', paddingBottom: '120px' }}>
       <div style={{ textAlign: 'center', marginBottom: '4rem' }}>
         <h2 style={{ fontSize: '3.5rem', color: '#fff', marginBottom: '1rem' }}>Voter Journey</h2>
         <p style={{ color: '#888', fontSize: '1.2rem' }}>A vertical scroll-process to master your democratic rights.</p>
@@ -134,6 +138,6 @@ export default function VoterJourney({ userAge }: { userAge: number }) {
           />
         ))}
       </div>
-    </div>
+    </section>
   );
 }

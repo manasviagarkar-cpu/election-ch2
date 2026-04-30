@@ -4,6 +4,9 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { UserCheck, Fingerprint, MousePointer2, FileText, CheckCircle } from 'lucide-react';
 
+/**
+ * VotingBooth simulates the step-by-step physical voting process.
+ */
 export default function VotingBooth() {
   const [step, setStep] = useState(1);
   const [isVoted, setIsVoted] = useState(false);
@@ -55,7 +58,7 @@ export default function VotingBooth() {
   };
 
   return (
-    <div style={{ paddingTop: '80px', minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', background: 'radial-gradient(circle at center, rgba(26, 35, 126, 0.1) 0%, transparent 70%)' }}>
+    <section style={{ paddingTop: '80px', minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', background: 'radial-gradient(circle at center, rgba(26, 35, 126, 0.1) 0%, transparent 70%)' }}>
       <h2 style={{ fontSize: '3rem', marginBottom: '1rem', color: '#1A237E', textShadow: '0 0 15px rgba(26, 35, 126, 0.5)' }}>
         Virtual Voting Booth
       </h2>
@@ -117,7 +120,7 @@ export default function VotingBooth() {
                 </div>
 
                 <div style={{ width: '100%', height: '450px', borderRadius: '30px', overflow: 'hidden', boxShadow: '0 30px 70px rgba(0,0,0,0.6)', border: '1px solid rgba(255,255,255,0.05)' }}>
-                  <img src={steps[step-1].image} alt="Visual Guide" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                  <img src={steps[step-1].image} alt={`Visual guide for ${steps[step-1].title}`} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                 </div>
               </div>
             </motion.div>
@@ -139,6 +142,6 @@ export default function VotingBooth() {
           </button>
         </motion.div>
       )}
-    </div>
+    </section>
   );
 }

@@ -4,6 +4,10 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Users, Building2, Crown, X, Info, HelpCircle, UserCheck, ShieldCheck, ChevronRight, User } from 'lucide-react';
 
+/**
+ * SystemLab component visualizes the parliamentary architecture and flow of power.
+ * Allows users to explore Lok Sabha and Rajya Sabha members.
+ */
 export default function SystemLab() {
   const [activeTab, setActiveTab] = useState<'houses' | 'hierarchy'>('houses');
   const [selectedMember, setSelectedMember] = useState<any>(null);
@@ -34,7 +38,7 @@ export default function SystemLab() {
   };
 
   return (
-    <div style={{ paddingTop: '80px', minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', paddingBottom: '120px' }}>
+    <section style={{ paddingTop: '80px', minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', paddingBottom: '120px' }}>
       <h2 style={{ fontSize: '3.5rem', marginBottom: '1rem', color: '#fff' }}>Parliamentary Architecture</h2>
       <p style={{ color: '#888', marginBottom: '3.5rem', fontSize: '1.2rem' }}>Direct visualization of legislative members and the flow of power.</p>
       
@@ -53,7 +57,7 @@ export default function SystemLab() {
                 {lokSabhaMembers.map((m, i) => (
                   <div key={i} onClick={() => setSelectedMember(m)} style={{ display: 'flex', alignItems: 'center', gap: '15px', padding: '1rem', background: 'rgba(255,255,255,0.03)', borderRadius: '12px', cursor: 'pointer', border: '1px solid rgba(255,255,255,0.05)' }}>
                     <div style={{ width: '50px', height: '50px', borderRadius: '50%', overflow: 'hidden' }}>
-                      <img src={m.image} alt={m.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                      <img src={m.image} alt={`${m.name} - ${m.party} member from ${m.state}`} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                     </div>
                     <div>
                       <h4 style={{ fontSize: '1.1rem' }}>{m.name}</h4>
@@ -71,7 +75,7 @@ export default function SystemLab() {
                 {rajyaSabhaMembers.map((m, i) => (
                   <div key={i} onClick={() => setSelectedMember(m)} style={{ display: 'flex', alignItems: 'center', gap: '15px', padding: '1rem', background: 'rgba(255,255,255,0.03)', borderRadius: '12px', cursor: 'pointer', border: '1px solid rgba(255,255,255,0.05)' }}>
                     <div style={{ width: '50px', height: '50px', borderRadius: '50%', overflow: 'hidden' }}>
-                      <img src={m.image} alt={m.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                      <img src={m.image} alt={`${m.name} - ${m.party} member from ${m.state}`} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                     </div>
                     <div>
                       <h4 style={{ fontSize: '1.1rem' }}>{m.name}</h4>
@@ -113,7 +117,7 @@ export default function SystemLab() {
             <motion.div initial={{ scale: 0.9, y: 20 }} animate={{ scale: 1, y: 0 }} className="glass-panel" style={{ width: '100%', maxWidth: '450px', padding: '3rem', position: 'relative', textAlign: 'center' }}>
               <button onClick={() => setSelectedMember(null)} style={{ position: 'absolute', top: '20px', right: '20px', background: 'transparent', border: 'none', color: '#fff', cursor: 'pointer' }}><X size={24} /></button>
               <div style={{ width: '120px', height: '120px', borderRadius: '50%', overflow: 'hidden', margin: '0 auto 2rem', border: '4px solid #1A237E' }}>
-                <img src={selectedMember.image} alt={selectedMember.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                <img src={selectedMember.image} alt={`Detailed portrait of ${selectedMember.name}`} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
               </div>
               <h3 style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>{selectedMember.name}</h3>
               <p style={{ color: '#1A237E', fontWeight: 800, fontSize: '1.1rem', marginBottom: '1.5rem' }}>{selectedMember.party} | {selectedMember.state}</p>
@@ -133,6 +137,6 @@ export default function SystemLab() {
           </motion.div>
         )}
       </AnimatePresence>
-    </div>
+    </section>
   );
 }

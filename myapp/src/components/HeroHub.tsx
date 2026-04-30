@@ -6,8 +6,12 @@ import { OrbitControls, Sphere, MeshDistortMaterial, Stars } from '@react-three/
 import * as THREE from 'three';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Globe, MapPin, Info, Gavel, User, Layers, Vote, Gamepad2, Map as MapIcon, Calendar, Clock, Trophy, ChevronRight, LayoutDashboard, Settings } from 'lucide-react';
+import ErrorBoundary from '@/components/ErrorBoundary';
 
-function InteractiveGlobe() {
+/**
+ * Interactive 3D Globe Component representing global elections.
+ * Uses React Three Fiber for rendering.
+ */
   const sphereRef = useRef<THREE.Mesh>(null);
 
   useFrame(({ clock }) => {
@@ -41,6 +45,10 @@ interface HeroHubProps {
   onNavigate: (section: string) => void;
 }
 
+/**
+ * HeroHub is the main dashboard component of the Global Civic Intelligence platform.
+ * It displays an interactive 3D globe, regional election statuses, and a bottom navigation hotbar.
+ */
 export default function HeroHub({ onNavigate }: HeroHubProps) {
   const [selectedCountry, setSelectedCountry] = useState<string | null>(null);
 
@@ -78,12 +86,14 @@ export default function HeroHub({ onNavigate }: HeroHubProps) {
   };
 
   return (
-    <div className="hero-hub" style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'center', paddingBottom: '120px' }}>
+    <main className="hero-hub" style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'center', paddingBottom: '120px' }}>
       <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', zIndex: 1 }}>
-        <Canvas camera={{ position: [0, 0, 5], fov: 45 }}>
-          <InteractiveGlobe />
-          <OrbitControls enableZoom={false} autoRotate />
-        </Canvas>
+        <ErrorBoundary>
+          <Canvas camera={{ position: [0, 0, 5], fov: 45 }}>
+            <InteractiveGlobe />
+            <OrbitControls enableZoom={false} autoRotate />
+          </Canvas>
+        </ErrorBoundary>
       </div>
 
       <motion.div 
@@ -136,6 +146,8 @@ export default function HeroHub({ onNavigate }: HeroHubProps) {
             {countries.map((c) => (
               <motion.div
                 key={c.id}
+                role="button"
+                aria-label={`View ${c.name} election timeline`}
                 whileHover={{ scale: 1.05, y: -10, border: `2px solid ${c.color}` }}
                 whileTap={{ scale: 0.95 }}
                 onClick={() => setSelectedCountry(c.id)}
@@ -200,7 +212,7 @@ export default function HeroHub({ onNavigate }: HeroHubProps) {
       </motion.div>
 
       {/* Navigation Hotbar */}
-      <motion.div 
+      <motion.footer 
         initial={{ y: 100 }}
         animate={{ y: 0 }}
         style={{
@@ -219,6 +231,8 @@ export default function HeroHub({ onNavigate }: HeroHubProps) {
         ].map((item) => (
           <motion.div
             key={item.id}
+            role="button"
+            aria-label={`Navigate to ${item.label}`}
             whileHover={{ scale: 1.15, y: -8, background: 'rgba(26, 35, 126, 0.3)' }}
             whileTap={{ scale: 0.9 }}
             onClick={() => onNavigate(item.id)}
@@ -240,6 +254,6 @@ export default function HeroHub({ onNavigate }: HeroHubProps) {
           50% { opacity: 0.4; }
         }
       `}</style>
-    </div>
+    </main>
   );
 }

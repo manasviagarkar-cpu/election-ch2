@@ -25,6 +25,11 @@ function FloatingPin({ color }: { color: string }) {
   );
 }
 
+import ErrorBoundary from '@/components/ErrorBoundary';
+
+/**
+ * PowerMap illustrates the geospatial hierarchy of government hubs.
+ */
 export default function PowerMap() {
   const hubs = [
     { id: 1, name: "Collector Office", role: "District Head", color: "#2196F3", top: '30%', left: '20%' },
@@ -33,7 +38,7 @@ export default function PowerMap() {
   ];
 
   return (
-    <div style={{ paddingTop: '80px', height: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', background: 'radial-gradient(circle at center, rgba(33, 150, 243, 0.05) 0%, transparent 70%)' }}>
+    <section style={{ paddingTop: '80px', height: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', background: 'radial-gradient(circle at center, rgba(33, 150, 243, 0.05) 0%, transparent 70%)' }}>
       <h2 style={{ fontSize: '3rem', marginBottom: '1rem', color: '#2196F3' }}>
         Power Map: Government Hubs
       </h2>
@@ -76,11 +81,13 @@ export default function PowerMap() {
             }}
           >
             <div style={{ width: '100px', height: '100px' }}>
-              <Canvas camera={{ position: [0, 0, 2] }}>
-                <ambientLight intensity={0.5} />
-                <pointLight position={[10, 10, 10]} />
-                <FloatingPin color={hub.color} />
-              </Canvas>
+              <ErrorBoundary>
+                <Canvas camera={{ position: [0, 0, 2] }}>
+                  <ambientLight intensity={0.5} />
+                  <pointLight position={[10, 10, 10]} />
+                  <FloatingPin color={hub.color} />
+                </Canvas>
+              </ErrorBoundary>
             </div>
             
             <motion.div 
@@ -115,6 +122,6 @@ export default function PowerMap() {
           [ GEO-SPATIAL SYSTEM ACTIVE ]
         </div>
       </div>
-    </div>
+    </section>
   );
 }

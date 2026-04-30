@@ -11,6 +11,10 @@ type Question = {
   explanation: string;
 };
 
+/**
+ * PlayZone (Civic IQ Challenge) provides a 10-question assessment 
+ * on global and Indian civic processes and rules.
+ */
 export default function PlayZone() {
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [selectedOption, setSelectedOption] = useState<number | null>(null);
@@ -109,7 +113,7 @@ export default function PlayZone() {
   };
 
   return (
-    <div style={{ paddingTop: '80px', minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', background: 'radial-gradient(circle at center, rgba(26, 35, 126, 0.1) 0%, transparent 70%)', paddingBottom: '100px' }}>
+    <section style={{ paddingTop: '80px', minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', background: 'radial-gradient(circle at center, rgba(26, 35, 126, 0.1) 0%, transparent 70%)', paddingBottom: '100px' }}>
       <h2 style={{ fontSize: '3.5rem', marginBottom: '1rem', color: '#1A237E', textShadow: '0 0 15px rgba(26, 35, 126, 0.3)' }}>
         Civic IQ Challenge
       </h2>
@@ -213,6 +217,6 @@ export default function PlayZone() {
           </motion.div>
         )}
       </AnimatePresence>
-    </div>
+    </section>
   );
 }
