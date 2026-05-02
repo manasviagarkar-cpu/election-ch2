@@ -1,16 +1,21 @@
-import type { Metadata } from 'next';
-import './globals.css';
+'use client';
 
-export const metadata: Metadata = {
-  title: 'Global Civic Intelligence',
-  description: 'The definitive digital mentor for global democratic engagement and electoral literacy.',
-};
+import { useEffect } from 'react';
+import './globals.css';
 
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  useEffect(() => {
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/sw.js').catch((err) => {
+        console.error('Service Worker registration failed:', err);
+      });
+    }
+  }, []);
+
   return (
     <html lang="en">
       <head>

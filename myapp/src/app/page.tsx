@@ -3,12 +3,14 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { LayoutDashboard, User, Layers, Gamepad2, Mic, Vote, Settings, LogOut, LogIn } from 'lucide-react';
+import dynamic from 'next/dynamic';
 import HeroHub from '@/components/HeroHub';
 import VoterJourney from '@/components/VoterJourney';
-import SystemLab from '@/components/SystemLab';
-import PlayZone from '@/components/PlayZone';
-import VotingBooth from '@/components/VotingBooth';
 import Profile from '@/components/Profile';
+
+const SystemLab = dynamic(() => import('@/components/SystemLab'), { ssr: false });
+const PlayZone = dynamic(() => import('@/components/PlayZone'), { ssr: false });
+const VotingBooth = dynamic(() => import('@/components/VotingBooth'), { ssr: false });
 
 // Mock types
 type FirebaseUser = {

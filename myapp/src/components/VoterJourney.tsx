@@ -67,12 +67,15 @@ const StageCard = ({ title, subtitle, icon: Icon, content, links, isExpanded, on
   </motion.div>
 );
 
+import { useVoterStatus } from '@/hooks/useVoterStatus';
+
 /**
  * VoterJourney maps out the enfranchisement process into a strict 1-2-3 path
  * ensuring election process education is clear and structured.
  */
 export default function VoterJourney({ userAge }: { userAge: number }) {
-  const [expandedStage, setExpandedStage] = useState<number | null>(userAge < 18 ? 1 : 2);
+  const { age, statusMessage, isEligible } = useVoterStatus(userAge);
+  const [expandedStage, setExpandedStage] = useState<number | null>(age < 18 ? 1 : 2);
 
   const stages = [
     {

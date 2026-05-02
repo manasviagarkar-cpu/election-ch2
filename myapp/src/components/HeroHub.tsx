@@ -12,6 +12,7 @@ import ErrorBoundary from '@/components/ErrorBoundary';
  * Interactive 3D Globe Component representing global elections.
  * Uses React Three Fiber for rendering.
  */
+function InteractiveGlobe() {
   const sphereRef = useRef<THREE.Mesh>(null);
 
   useFrame(({ clock }) => {

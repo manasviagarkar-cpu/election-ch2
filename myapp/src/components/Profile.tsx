@@ -4,8 +4,21 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { User, Mail, Calendar, CreditCard, LogIn, ShieldCheck } from 'lucide-react';
 
+import { z } from 'zod';
+import { gcpPipeline } from '@/lib/gcp-pipeline';
+
+const ProfileSchema = z.object({
+  age: z.number().min(0).max(120),
+  displayName: z.string().min(2).max(50),
+  voterIdStatus: z.boolean(),
+});
+
 interface ProfileProps {
-  user: any;
+  user: {
+    displayName: string | null;
+    email: string | null;
+    photoURL: string | null;
+  } | null;
   data: {
     age: number;
     voterIdStatus: boolean;
@@ -72,7 +85,14 @@ export default function Profile({ user, data, setData, onLogin }: ProfileProps) 
                 <input 
                   type="number" 
                   value={data.age} 
-                  onChange={(e) => setData({...data, age: parseInt(e.target.value) || 0})}
+                  onChange={(e) => {
+                    const newAge = parseInt(e.target.value) || 0;
+                    const result = ProfileSchema.pick({ age: true }).safeParse({ age: newAge });
+                    if (result.success) {
+                      setData({...data, age: newAge});
+                      if (user) gcpPipeline.dispatchVoterActivity(user.email || 'anon', 'AGE_UPDATE', { age: newAge });
+                    }
+                  }}
                   style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', padding: '12px', borderRadius: '10px', color: '#fff', fontSize: '1.1rem' }}
                 />
               </div>
@@ -88,7 +108,11 @@ export default function Profile({ user, data, setData, onLogin }: ProfileProps) 
                   </div>
                 </div>
                 <div 
-                  onClick={() => setData({...data, voterIdStatus: !data.voterIdStatus})}
+                  onClick={() => {
+                    const nextStatus = !data.voterIdStatus;
+                    setData({...data, voterIdStatus: nextStatus});
+                    if (user) gcpPipeline.dispatchVoterActivity(user.email || 'anon', 'VOTER_ID_TOGGLE', { status: nextStatus });
+                  }}
                   style={{ 
                     width: '60px', height: '30px', background: data.voterIdStatus ? 'var(--accent-green)' : '#444', 
                     borderRadius: '15px', position: 'relative', cursor: 'pointer', transition: 'all 0.3s ease' 
